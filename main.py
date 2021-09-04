@@ -254,7 +254,7 @@ if __name__ == "__main__":
 ** **
 *   *
 **o**
-** **
+**x**
 *****"""
 
     maze = Maze.parse(maze3)
