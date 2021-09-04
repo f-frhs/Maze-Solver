@@ -15,7 +15,7 @@ class EFloor(Enum):
         elif (self == EFloor.Wall): return '*'
         elif (self == EFloor.Start): return 'o'
         elif (self == EFloor.Goal): return 'x'
-        raise NotImplementedError()
+        raise ValueError(f"Cannot convert to_char() with self={self}")
 
     @staticmethod
     def of(c: chr):
