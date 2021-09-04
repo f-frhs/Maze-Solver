@@ -59,6 +59,17 @@ class Maze:
 
     @classmethod
     def parse(cls, s: str):
+        cls._validate(s)
+
+        lines = s.splitlines()
+        floors = [[EFloor.of(aChar) for aChar in line] for line in lines]
+
+        start_at = cls._find_xy(EFloor.Start, floors)
+        goal_at = cls._find_xy(EFloor.Goal, floors)
+        return Maze(floors, start_at, goal_at)
+
+    @classmethod
+    def _validate(cls, s: str) -> None:
         has_start = EFloor.Start.to_char() in s
         if (not has_start):
             print("Error: Cannot find the beginning position. Abort program.")
@@ -68,13 +79,6 @@ class Maze:
         if (not has_goal):
             print("Error: Cannot find the exit position. Abort program.")
             sys.exit(1)
-
-        lines = s.splitlines()
-        floors = [[EFloor.of(aChar) for aChar in line] for line in lines]
-
-        start_at = cls._find_xy(EFloor.Start, floors)
-        goal_at = cls._find_xy(EFloor.Goal, floors)
-        return Maze(floors, start_at, goal_at)
 
     @classmethod
     def _find_xy(cls, kind: EFloor, floor_map_2d: list) -> Point2D:
