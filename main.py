@@ -94,19 +94,26 @@ class EOrientation(Enum):
     South = Vector2D(+1, 0)
     East = Vector2D(0, +1)
 
-    def turn_to_the_right(self):
+    def turn_to_the_right(self) -> EOrientation:
         if self == EOrientation.North: return EOrientation.East
         if self == EOrientation.West: return EOrientation.North
         if self == EOrientation.South: return EOrientation.West
         if self == EOrientation.East: return EOrientation.South
-        raise NotImplementedError("This should not happen.")
+        raise ValueError(f"{self} is not a valid {EOrientation.__name__}")
 
-    def turn_to_the_left(self):
+    def turn_to_the_left(self) -> EOrientation:
         if self == EOrientation.North: return EOrientation.West
         if self == EOrientation.West: return EOrientation.South
         if self == EOrientation.South: return EOrientation.East
         if self == EOrientation.East: return EOrientation.North
-        raise NotImplementedError("This should not happen.")
+        raise ValueError(f"{self} is not a valid {EOrientation.__name__}")
+
+    def turn_around(self) -> EOrientation:
+        if self == EOrientation.North: return EOrientation.South
+        if self == EOrientation.West: return EOrientation.East
+        if self == EOrientation.South: return EOrientation.North
+        if self == EOrientation.East: return EOrientation.West
+        raise ValueError(f"{self} is not a valid {EOrientation.__name__}")
 
     def __str__(self) -> str:
         return f"{self.name.lower()}"
@@ -136,8 +143,7 @@ class Player:
         self.orientation = self.orientation.turn_to_the_left()
 
     def turn_around(self) -> None:
-        self.orientation = self.orientation.turn_to_the_right()
-        self.orientation = self.orientation.turn_to_the_right()
+        self.orientation = self.orientation.turn_around()
 
     def step_forward(self) -> None:
         self.position = self.position + self.orientation.value
@@ -224,8 +230,7 @@ class MazeManager:
         self.player.turn_to_the_left()
 
     def player_can_go_backward(self) -> bool:
-        new_orientation = self.player.orientation.turn_to_the_right()
-        new_orientation = new_orientation.turn_to_the_right()
+        new_orientation = self.player.orientation.turn_around()
         next_pos = self.player.position + new_orientation.value
         return self._player_can_go(next_pos)
 
