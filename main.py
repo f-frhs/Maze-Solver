@@ -23,7 +23,7 @@ class EFloor(Enum):
         elif c == '*': return EFloor.Wall
         elif c == 'o': return EFloor.Start
         elif c == 'x': return EFloor.Goal
-        raise LookupError("Invalid character: '{}'".format(c))
+        raise ValueError("Invalid character: '{}'".format(c))
 
 
 class Vector2D(namedtuple('Vector2D', ['x', 'y'])):
