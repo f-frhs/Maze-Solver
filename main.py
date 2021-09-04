@@ -60,12 +60,12 @@ class Maze:
     @classmethod
     def parse(cls, s: str):
         has_start = EFloor.Start.to_char() in s
-        if(not has_start):
+        if (not has_start):
             print("Error: Cannot find the beginning position. Abort program.")
             sys.exit(1)
 
         has_goal = EFloor.Goal.to_char() in s
-        if(not has_goal):
+        if (not has_goal):
             print("Error: Cannot find the exit position. Abort program.")
             sys.exit(1)
 
