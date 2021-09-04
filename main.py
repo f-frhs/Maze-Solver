@@ -141,6 +141,9 @@ class Player:
     def step_forward(self) -> None:
         self.position = self.position + self.orientation.value
 
+    def to_Pose(self) -> Pose:
+        return Pose(self.position, self.orientation)
+
 
 class MazeManager:
     def __init__(self, maze: Maze, player: Player) -> None:
@@ -148,41 +151,44 @@ class MazeManager:
         self.player = player
 
     def process_players_trial(self) -> None:
-        history = set()
-
+        """Try to solve a given maze by using wall-follower algorithm.
+        """
         print(f"Current position: {str(self.player.position)}")
-        currentPose = Pose(self.player.position, self.player.orientation)
 
-        while (not (self.player.is_located_at(self.maze.goal))
-               and (currentPose not in history)):
+        history = set()
+        while (not (self.is_player_located_at_goal())
+               and (self.player.to_Pose() not in history)):
 
-            history.add(currentPose)
+            history.add(self.player.to_Pose())
 
             if (self.player_can_go_right()):
                 self.player_turn_to_the_right()
                 self.player_step_forward()
+                continue
 
             elif (self.player_can_go_forward()):
                 self.player_keep_orientation()
                 self.player_step_forward()
+                continue
 
             elif (self.player_can_go_left()):
                 self.player_turn_to_the_left()
                 self.player_step_forward()
-
-            elif (self.player_can_go_backward()):
-                self.player_turn_around()
-                self.player_step_forward()
+                continue
 
             else:
-                raise NotImplementedError("This should not happen.")
+                # go backward. no other choice.
+                self.player_turn_around()
+                self.player_step_forward()
+                continue
 
-            currentPose = Pose(self.player.position, self.player.orientation)
-
-        if self.player.is_located_at(self.maze.goal):
+        if self.is_player_located_at_goal():
             print(f"Exit at {str(self.player.position)}")
         else:
             print(f"There is no solution for this maze.")
+
+    def is_player_located_at_goal(self) -> bool:
+        return self.player.is_located_at(self.maze.goal)
 
     def player_can_go_right(self) -> bool:
         new_orientation = self.player.orientation.turn_to_the_right()
