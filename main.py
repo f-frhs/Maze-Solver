@@ -24,7 +24,7 @@ class EFloor(Enum):
         elif c == '*': return EFloor.Wall
         elif c == 'o': return EFloor.Start
         elif c == 'x': return EFloor.Goal
-        raise ValueError("Invalid character: '{}'".format(c))
+        raise ValueError(f"Invalid character: '{c}'")
 
 
 class Vector2D(NamedTuple):
