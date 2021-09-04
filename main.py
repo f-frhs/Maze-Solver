@@ -1,7 +1,7 @@
 import os
 import sys
 from enum import Enum
-from collections import namedtuple
+from typing import NamedTuple
 
 
 class EFloor(Enum):
@@ -26,23 +26,17 @@ class EFloor(Enum):
         raise ValueError("Invalid character: '{}'".format(c))
 
 
-class Vector2D(namedtuple('Vector2D', ['x', 'y'])):
-    # avoid using dict to store fiedls as namedtuple does
-    __slots__ = ()
-
-    def __repr__(self) -> str:
-        return f"Vector2D({self.x}, {self.y})"
+class Vector2D(NamedTuple):
+    x: int
+    y: int
 
 
-class Point2D(namedtuple('Point2D', ['x', 'y'])):
-    # avoid using dict to store fiedls as namedtuple does
-    __slots__ = ()
+class Point2D(NamedTuple):
+    x: int
+    y: int
 
     def __str__(self) -> str:
         return f"({self.x}, {self.y})"
-
-    def __repr__(self) -> str:
-        return f"Point2D({self.x}, {self.y})"
 
     def __add__(self, other: Vector2D):
         if (type(other) is not Vector2D):
@@ -113,9 +107,9 @@ class EOrientation(Enum):
         return f"{self.name.lower()}"
 
 
-class Pose(namedtuple('Pose', ['position', 'orientation'])):
-    # avoid using dict to store fiedls as namedtuple does
-    __slots__ = ()
+class Pose(NamedTuple):
+    position: Point2D
+    orientation: Vector2D
 
 
 class Player:
