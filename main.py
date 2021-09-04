@@ -1,3 +1,4 @@
+from __future__ import annotations  # for static constructor
 import os
 import sys
 from enum import Enum
@@ -18,7 +19,7 @@ class EFloor(Enum):
         raise ValueError(f"Cannot convert to_char() with self={self}")
 
     @staticmethod
-    def of(c: chr):
+    def of(c: chr) -> EFloor:
         if c == ' ': return EFloor.Normal
         elif c == '*': return EFloor.Wall
         elif c == 'o': return EFloor.Start
@@ -57,19 +58,19 @@ class Maze:
         result = os.linesep.join(lines)
         return result
 
-    @classmethod
-    def parse(cls, s: str):
-        cls._validate(s)
+    @staticmethod
+    def parse(s: str) -> Maze:
+        Maze._validate(s)
 
         lines = s.splitlines()
         floors = [[EFloor.of(aChar) for aChar in line] for line in lines]
 
-        start_at = cls._find_xy(EFloor.Start, floors)
-        goal_at = cls._find_xy(EFloor.Goal, floors)
+        start_at = Maze._find_xy(EFloor.Start, floors)
+        goal_at = Maze._find_xy(EFloor.Goal, floors)
         return Maze(floors, start_at, goal_at)
 
-    @classmethod
-    def _validate(cls, s: str) -> None:
+    @staticmethod
+    def _validate(s: str) -> None:
         has_start = EFloor.Start.to_char() in s
         if (not has_start):
             print("Error: Cannot find the beginning position. Abort program.")
@@ -80,8 +81,8 @@ class Maze:
             print("Error: Cannot find the exit position. Abort program.")
             sys.exit(1)
 
-    @classmethod
-    def _find_xy(cls, kind: EFloor, floor_map_2d: list) -> Point2D:
+    @staticmethod
+    def _find_xy(kind: EFloor, floor_map_2d: list) -> Point2D:
         x = [i for i, row in enumerate(floor_map_2d) if (kind in row)][0]
         y = floor_map_2d[x].index(kind)
         return Point2D(x, y)
